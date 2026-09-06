@@ -7,6 +7,13 @@ body {
   margin: 0;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .rectangle {
   height: 500px;
   width: 1000px;
@@ -14,4 +21,19 @@ body {
   border-style: solid;
   border-width: 10px;
   border-color: #000000;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  text-align: center;
+  align-content: center;
 }
