@@ -1,0 +1,17 @@
+:root {
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+}
+
+.rectangle {
+  height: 500px;
+  width: 1000px;
+  background-color: #c4a7a7;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #000000;
+}
