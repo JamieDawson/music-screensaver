@@ -37,3 +37,16 @@ body {
   text-align: center;
   align-content: center;
 }
+
+.note {
+  background-color: blue;
+  width: 30px;
+  height: 30px;
+  color: white;
+  text-align: center;
+  align-content: center;
+}
+
+.title {
+  margin-bottom: 30px;
+}

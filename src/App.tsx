@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { animated } from "react-spring";
+import squareImg from "../src/assets/square-img.png";
 
 function App() {
+  // A click point on the screen (pixels from the top-left)
   type Spawn = {
     x: number;
     y: number;
   };
 
+  // All click points so far. setSpawns replaces the whole list.
   const [spawns, setSpawns] = useState<Spawn[]>([]);
 
+  // One "+1" label, placed at a click point
   const Spawn = ({ x, y }: Spawn) => {
-    const spawnStyles = {
+    const spawnStyles: React.CSSProperties = {
       position: "absolute",
       left: x + "px",
       top: y + "px",
@@ -19,15 +23,16 @@ function App() {
 
     return (
       <animated.div style={spawnStyles}>
-        <p>+1</p>
+        <div className="note">+1</div>
       </animated.div>
     );
   };
 
   const clickHandler = (event: React.MouseEvent) => {
-    const { clientX, clientY } = event;
+    const { clientX, clientY } = event; // mouse position in the window
     console.log(clientX, clientY);
 
+    // Keep old clicks, then add this one
     setSpawns([
       ...spawns,
       {
@@ -39,13 +44,14 @@ function App() {
 
   return (
     <div className="container">
-      <div>Music screen saver</div>
+      <div className="title">Music screen saver</div>
       <div className="rectangle" onClick={(event) => clickHandler(event)}>
-        {spawns.map((spawn) => {
-          return <Spawn x={spawn.x} y={spawn.y} />;
+        {/* Draw a "+1" for every stored click */}
+        {spawns.map((spawn, key) => {
+          return <Spawn x={spawn.x} y={spawn.y} key={key} />;
         })}
         <div className="iconContainer">
-          <div className="icon">icon</div>
+          <img src={squareImg} alt="square" className="icon"></img>
         </div>
       </div>
     </div>
