@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { animated } from "react-spring";
 import { DVDIcon } from "./components/DVDIcon";
 import {
@@ -16,6 +16,7 @@ function App() {
 
   //Scale selecting:
   const [selectedScale, setSelectedScale] = useState("cmajor");
+  const [selectedNote, setSelectedNote] = useState("C");
 
   const scales = {
     cmajor: ["C", "D", "E", "F", "G", "A", "B", "C"],
@@ -23,7 +24,7 @@ function App() {
     gmajor: ["G", "A", "B", "C", "D", "E", "F#", "G"],
   };
 
-  const Spawn = ({ x, y }: Pick<Obstacle, "x" | "y">) => {
+  const Spawn = ({ x, y, note }: Pick<Obstacle, "x" | "y" | "note">) => {
     const spawnStyles: React.CSSProperties = {
       position: "absolute",
       left: x + "px",
@@ -33,7 +34,7 @@ function App() {
 
     return (
       <animated.div style={spawnStyles}>
-        <div className="note">+1</div>
+        <div className="note">{note}</div>
       </animated.div>
     );
   };
@@ -52,9 +53,18 @@ function App() {
         y,
         width: SPAWN_SIZE,
         height: SPAWN_SIZE,
+        note: selectedNote,
       },
     ]);
   };
+
+  const updateNote = (clickedNote: string) => {
+    setSelectedNote(clickedNote);
+  };
+
+  useEffect(() => {
+    console.log(spawns);
+  }, [spawns]);
 
   return (
     <div className="container">
@@ -69,12 +79,15 @@ function App() {
       </select>
       <div>
         {Object.values(scales[selectedScale]).map((note) => (
-          <button>{note}</button>
+          <button onClick={() => updateNote(note)}>{note}</button>
         ))}
       </div>
+      <div>Current selected note: {selectedNote}</div>
       <div className="rectangle" onClick={clickHandler}>
         {spawns.map((spawn) => {
-          return <Spawn x={spawn.x} y={spawn.y} key={spawn.id} />;
+          return (
+            <Spawn x={spawn.x} y={spawn.y} note={spawn.note} key={spawn.id} />
+          );
         })}
         <DVDIcon
           width={`${LOGO_WIDTH}px`}

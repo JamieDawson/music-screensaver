@@ -11,6 +11,7 @@ export type Obstacle = {
   y: number;
   width: number;
   height: number;
+  note: string;
 };
 
 type Rect = {
