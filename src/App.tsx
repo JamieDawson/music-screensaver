@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { animated } from "react-spring";
-import squareImg from "../src/assets/square-img.png";
+import { DVDIcon } from "./components/DVDIcon";
+import {
+  LOGO_HEIGHT,
+  LOGO_WIDTH,
+  useDimensions,
+  type Obstacle,
+} from "./hooks/useDimensions";
+
+const SPAWN_SIZE = 30;
 
 function App() {
-  // A click point on the screen (pixels from the top-left)
-  type Spawn = {
-    x: number;
-    y: number;
-  };
+  const [spawns, setSpawns] = useState<Obstacle[]>([]);
+  const { color, top, left } = useDimensions(spawns);
 
-  // All click points so far. setSpawns replaces the whole list.
-  const [spawns, setSpawns] = useState<Spawn[]>([]);
-
-  // One "+1" label, placed at a click point
-  const Spawn = ({ x, y }: Spawn) => {
+  const Spawn = ({ x, y }: Pick<Obstacle, "x" | "y">) => {
     const spawnStyles: React.CSSProperties = {
       position: "absolute",
       left: x + "px",
@@ -28,16 +29,20 @@ function App() {
     );
   };
 
-  const clickHandler = (event: React.MouseEvent) => {
-    const { clientX, clientY } = event; // mouse position in the window
-    console.log(clientX, clientY);
+  const clickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Position inside the rectangle, not the whole window
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - bounds.left - event.currentTarget.clientLeft;
+    const y = event.clientY - bounds.top - event.currentTarget.clientTop;
 
-    // Keep old clicks, then add this one
     setSpawns([
       ...spawns,
       {
-        x: clientX,
-        y: clientY,
+        id: Date.now() + spawns.length,
+        x,
+        y,
+        width: SPAWN_SIZE,
+        height: SPAWN_SIZE,
       },
     ]);
   };
@@ -45,17 +50,26 @@ function App() {
   return (
     <div className="container">
       <div className="title">Music screen saver</div>
-      <div className="rectangle" onClick={(event) => clickHandler(event)}>
-        {/* Draw a "+1" for every stored click */}
-        {spawns.map((spawn, key) => {
-          return <Spawn x={spawn.x} y={spawn.y} key={key} />;
+      <div className="rectangle" onClick={clickHandler}>
+        {spawns.map((spawn) => {
+          return <Spawn x={spawn.x} y={spawn.y} key={spawn.id} />;
         })}
-        <div className="iconContainer">
-          <img src={squareImg} alt="square" className="icon"></img>
-        </div>
+        <DVDIcon
+          width={`${LOGO_WIDTH}px`}
+          height={`${LOGO_HEIGHT}px`}
+          color={color}
+          top={top}
+          left={left}
+        />
       </div>
     </div>
   );
 }
 
 export default App;
+
+/*
+
+
+
+*/
