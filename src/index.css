@@ -47,6 +47,15 @@ body {
   color: white;
   text-align: center;
   align-content: center;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.octave-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
 }
 
 .title {

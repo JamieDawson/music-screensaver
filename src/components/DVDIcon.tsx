@@ -25,6 +25,7 @@ export const DVDIcon = ({
         position: "absolute",
         top,
         left,
+        pointerEvents: "none",
       }}
     >
       <path
