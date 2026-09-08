@@ -14,6 +14,15 @@ function App() {
   const [spawns, setSpawns] = useState<Obstacle[]>([]);
   const { color, top, left } = useDimensions(spawns);
 
+  //Scale selecting:
+  const [selectedScale, setSelectedScale] = useState("cmajor");
+
+  const scales = {
+    cmajor: ["C", "D", "E", "F", "G", "A", "B", "C"],
+    aminor: ["A", "B", "C", "D", "E", "F", "G", "A"],
+    gmajor: ["G", "A", "B", "C", "D", "E", "F#", "G"],
+  };
+
   const Spawn = ({ x, y }: Pick<Obstacle, "x" | "y">) => {
     const spawnStyles: React.CSSProperties = {
       position: "absolute",
@@ -50,6 +59,19 @@ function App() {
   return (
     <div className="container">
       <div className="title">Music screen saver</div>
+      <select
+        value={selectedScale}
+        onChange={(event) => setSelectedScale(event.target.value)}
+      >
+        <option value="cmajor">C Major</option>
+        <option value="aminor">A Minor</option>
+        <option value="gmajor">G Major</option>
+      </select>
+      <div>
+        {Object.values(scales[selectedScale]).map((note) => (
+          <button>{note}</button>
+        ))}
+      </div>
       <div className="rectangle" onClick={clickHandler}>
         {spawns.map((spawn) => {
           return <Spawn x={spawn.x} y={spawn.y} key={spawn.id} />;
