@@ -10,48 +10,16 @@ import {
   useDimensions,
   type Obstacle,
 } from "./hooks/useDimensions";
+import {
+  defaultScaleId,
+  getScale,
+  scaleGroups,
+  withOctaves,
+} from "./scales";
 
 const SPAWN_SIZE = 30;
 const MIN_OCTAVE = 1;
 const MAX_OCTAVE = 7;
-
-const PITCH: Record<string, number> = {
-  C: 0,
-  "C#": 1,
-  D: 2,
-  "D#": 3,
-  E: 4,
-  F: 5,
-  "F#": 6,
-  G: 7,
-  "G#": 8,
-  A: 9,
-  "A#": 10,
-  B: 11,
-};
-
-const scales = {
-  cmajor: ["C", "D", "E", "F", "G", "A", "B", "C"],
-  aminor: ["A", "B", "C", "D", "E", "F", "G", "A"],
-  gmajor: ["G", "A", "B", "C", "D", "E", "F#", "G"],
-};
-
-type ScaleName = keyof typeof scales;
-
-// C4, D4, ... B4, C5 — octave goes up when the scale wraps past B to C
-function withOctaves(notes: readonly string[], startOctave: number) {
-  let octave = startOctave;
-  let previousPitch = -1;
-
-  return notes.map((note, index) => {
-    const pitch = PITCH[note] ?? 0;
-    if (index > 0 && pitch <= previousPitch) {
-      octave += 1;
-    }
-    previousPitch = pitch;
-    return `${note}${octave}`;
-  });
-}
 
 function Spawn({ x, y, note }: Pick<Obstacle, "x" | "y" | "note">) {
   const spawnStyles: React.CSSProperties = {
@@ -75,11 +43,11 @@ function App() {
     void playNote(obstacle.note);
   });
 
-  const [selectedScale, setSelectedScale] = useState<ScaleName>("cmajor");
+  const [selectedScale, setSelectedScale] = useState(defaultScaleId);
   const [octave, setOctave] = useState(4);
   const [selectedNote, setSelectedNote] = useState("C4");
 
-  const scaleNotes = withOctaves(scales[selectedScale], octave);
+  const scaleNotes = withOctaves(getScale(selectedScale).notes, octave);
 
   const clickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     void startAudio();
@@ -122,9 +90,9 @@ function App() {
     setSelectedNote(clickedNote);
   };
 
-  const changeScale = (scale: ScaleName) => {
-    setSelectedScale(scale);
-    setSelectedNote(withOctaves(scales[scale], octave)[0]);
+  const changeScale = (scaleId: string) => {
+    setSelectedScale(scaleId);
+    setSelectedNote(withOctaves(getScale(scaleId).notes, octave)[0]);
   };
 
   const shiftOctave = (delta: number) => {
@@ -134,7 +102,9 @@ function App() {
     );
     const noteIndex = Math.max(0, scaleNotes.indexOf(selectedNote));
     setOctave(nextOctave);
-    setSelectedNote(withOctaves(scales[selectedScale], nextOctave)[noteIndex]);
+    setSelectedNote(
+      withOctaves(getScale(selectedScale).notes, nextOctave)[noteIndex],
+    );
   };
 
   useEffect(() => {
@@ -172,11 +142,17 @@ function App() {
             <select
               className="tv-select"
               value={selectedScale}
-              onChange={(event) => changeScale(event.target.value as ScaleName)}
+              onChange={(event) => changeScale(event.target.value)}
             >
-              <option value="cmajor">C Major</option>
-              <option value="aminor">A Minor</option>
-              <option value="gmajor">G Major</option>
+              {scaleGroups.map((group) => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.scales.map((scale) => (
+                    <option key={scale.id} value={scale.id}>
+                      {scale.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </div>
           <div className="tv-control">
