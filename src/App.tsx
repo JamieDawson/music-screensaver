@@ -128,7 +128,10 @@ function App() {
   };
 
   const shiftOctave = (delta: number) => {
-    const nextOctave = Math.min(MAX_OCTAVE, Math.max(MIN_OCTAVE, octave + delta));
+    const nextOctave = Math.min(
+      MAX_OCTAVE,
+      Math.max(MIN_OCTAVE, octave + delta),
+    );
     const noteIndex = Math.max(0, scaleNotes.indexOf(selectedNote));
     setOctave(nextOctave);
     setSelectedNote(withOctaves(scales[selectedScale], nextOctave)[noteIndex]);
@@ -140,7 +143,6 @@ function App() {
 
   return (
     <div className="container">
-      <div className="title">Music screen saver</div>
       <div className="tv-set">
         <div className="tv">
           <div className="rectangle" onClick={clickHandler}>
@@ -170,9 +172,7 @@ function App() {
             <select
               className="tv-select"
               value={selectedScale}
-              onChange={(event) =>
-                changeScale(event.target.value as ScaleName)
-              }
+              onChange={(event) => changeScale(event.target.value as ScaleName)}
             >
               <option value="cmajor">C Major</option>
               <option value="aminor">A Minor</option>
@@ -207,9 +207,7 @@ function App() {
               {scaleNotes.map((note) => (
                 <button
                   type="button"
-                  className={
-                    note === selectedNote ? "tv-btn is-on" : "tv-btn"
-                  }
+                  className={note === selectedNote ? "tv-btn is-on" : "tv-btn"}
                   key={note}
                   onClick={() => updateNote(note)}
                 >
@@ -222,9 +220,7 @@ function App() {
             <span className="tv-label">On air</span>
             <div className="tv-status">
               <span className="tv-led" />
-              <span className="tv-readout tv-readout-wide">
-                {selectedNote}
-              </span>
+              <span className="tv-readout tv-readout-wide">{selectedNote}</span>
             </div>
           </div>
         </div>

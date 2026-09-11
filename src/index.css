@@ -6,7 +6,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #e4e4e4;
+  background: #0c0808;
 }
 
 .container {
@@ -21,6 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 1326px;
+  margin-top: 20px;
 }
 
 .tv {
@@ -29,6 +30,7 @@ body {
   aspect-ratio: 827 / 400;
   isolation: isolate;
   background: #d2d2d2;
+  box-shadow: 0 0 30px 5px rgba(244, 255, 253, 0.6);
 }
 
 .tv-panel {
