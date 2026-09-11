@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import tvStencil from "./assets/tvstencil.webp";
 import { playNote, startAudio } from "./audio";
 import { DVDIcon } from "./components/DVDIcon";
 import {
   LOGO_HEIGHT,
   LOGO_WIDTH,
+  RECT_HEIGHT,
+  RECT_WIDTH,
   useDimensions,
   type Obstacle,
 } from "./hooks/useDimensions";
@@ -81,8 +84,8 @@ function App() {
   const clickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     void startAudio();
     const bounds = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - bounds.left - event.currentTarget.clientLeft;
-    const y = event.clientY - bounds.top - event.currentTarget.clientTop;
+    const x = ((event.clientX - bounds.left) / bounds.width) * RECT_WIDTH;
+    const y = ((event.clientY - bounds.top) / bounds.height) * RECT_HEIGHT;
 
     // Last matching block is on top if two overlap
     const hit = [...spawns].reverse().find((spawn) => {
@@ -171,24 +174,27 @@ function App() {
         ))}
       </div>
       <div>Current selected note: {selectedNote}</div>
-      <div className="rectangle" onClick={clickHandler}>
-        {spawns.map((spawn) => {
-          return (
-            <Spawn
-              x={spawn.x}
-              y={spawn.y}
-              note={spawn.note}
-              key={spawn.id}
-            />
-          );
-        })}
-        <DVDIcon
-          width={`${LOGO_WIDTH}px`}
-          height={`${LOGO_HEIGHT}px`}
-          color={color}
-          top={top}
-          left={left}
-        />
+      <div className="tv">
+        <div className="rectangle" onClick={clickHandler}>
+          {spawns.map((spawn) => {
+            return (
+              <Spawn
+                x={spawn.x}
+                y={spawn.y}
+                note={spawn.note}
+                key={spawn.id}
+              />
+            );
+          })}
+          <DVDIcon
+            width={`${LOGO_WIDTH}px`}
+            height={`${LOGO_HEIGHT}px`}
+            color={color}
+            top={top}
+            left={left}
+          />
+        </div>
+        <img src={tvStencil} alt="" className="tv-frame" />
       </div>
     </div>
   );
