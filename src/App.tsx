@@ -1,6 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import tvStencil from "./assets/tvstencil.webp";
-import { playNote, setSynth, startAudio, synthOptions, type SynthName } from "./audio";
+import {
+  playNote,
+  setDelayAmount,
+  setSynth,
+  startAudio,
+  synthOptions,
+  type SynthName,
+} from "./audio";
 import { DVDIcon } from "./components/DVDIcon";
 import {
   LOGO_HEIGHT,
@@ -15,6 +22,54 @@ import { defaultScaleId, getScale, scaleGroups, withOctaves } from "./scales";
 const SPAWN_SIZE = 30;
 const MIN_OCTAVE = 1;
 const MAX_OCTAVE = 7;
+
+function DelayKnob({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  const startY = useRef(0);
+  const startValue = useRef(0);
+  const angle = -135 + value * 270;
+
+  return (
+    <div
+      className="tv-knob"
+      role="slider"
+      aria-label="Delay"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(value * 100)}
+      tabIndex={0}
+      onPointerDown={(event) => {
+        event.currentTarget.setPointerCapture(event.pointerId);
+        startY.current = event.clientY;
+        startValue.current = value;
+      }}
+      onPointerMove={(event) => {
+        if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+          return;
+        }
+        const next = startValue.current + (startY.current - event.clientY) / 90;
+        onChange(Math.min(1, Math.max(0, next)));
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowUp" || event.key === "ArrowRight") {
+          onChange(Math.min(1, value + 0.05));
+        }
+        if (event.key === "ArrowDown" || event.key === "ArrowLeft") {
+          onChange(Math.max(0, value - 0.05));
+        }
+      }}
+    >
+      <div className="tv-knob-face" style={{ transform: `rotate(${angle}deg)` }}>
+        <span className="tv-knob-marker" />
+      </div>
+    </div>
+  );
+}
 
 function Spawn({ x, y, note }: Pick<Obstacle, "x" | "y" | "note">) {
   const spawnStyles: React.CSSProperties = {
@@ -40,6 +95,7 @@ function App() {
 
   const [selectedScale, setSelectedScale] = useState(defaultScaleId);
   const [selectedSynth, setSelectedSynth] = useState<SynthName>("synth");
+  const [delayAmount, setDelayAmountState] = useState(0.2);
   const [octave, setOctave] = useState(4);
   const [selectedNote, setSelectedNote] = useState("C4");
 
@@ -95,6 +151,12 @@ function App() {
     void startAudio();
     setSelectedSynth(name);
     setSynth(name);
+  };
+
+  const changeDelay = (amount: number) => {
+    void startAudio();
+    setDelayAmountState(amount);
+    setDelayAmount(amount);
   };
 
   const shiftOctave = (delta: number) => {
@@ -176,6 +238,10 @@ function App() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="tv-control">
+            <span className="tv-label">Delay</span>
+            <DelayKnob value={delayAmount} onChange={changeDelay} />
           </div>
           <div className="tv-control">
             <span className="tv-label">Octave</span>
