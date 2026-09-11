@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import tvStencil from "./assets/tvstencil.webp";
-import { playNote, startAudio } from "./audio";
+import { playNote, setSynth, startAudio, synthOptions, type SynthName } from "./audio";
 import { DVDIcon } from "./components/DVDIcon";
 import {
   LOGO_HEIGHT,
@@ -39,6 +39,7 @@ function App() {
   });
 
   const [selectedScale, setSelectedScale] = useState(defaultScaleId);
+  const [selectedSynth, setSelectedSynth] = useState<SynthName>("synth");
   const [octave, setOctave] = useState(4);
   const [selectedNote, setSelectedNote] = useState("C4");
 
@@ -88,6 +89,12 @@ function App() {
   const changeScale = (scaleId: string) => {
     setSelectedScale(scaleId);
     setSelectedNote(withOctaves(getScale(scaleId).notes, octave)[0]);
+  };
+
+  const changeSynth = (name: SynthName) => {
+    void startAudio();
+    setSelectedSynth(name);
+    setSynth(name);
   };
 
   const shiftOctave = (delta: number) => {
@@ -151,6 +158,22 @@ function App() {
                     </option>
                   ))}
                 </optgroup>
+              ))}
+            </select>
+          </div>
+          <div className="tv-control">
+            <span className="tv-label">Synth</span>
+            <select
+              className="tv-select"
+              value={selectedSynth}
+              onChange={(event) =>
+                changeSynth(event.target.value as SynthName)
+              }
+            >
+              {synthOptions.map((synth) => (
+                <option key={synth.id} value={synth.id}>
+                  {synth.label}
+                </option>
               ))}
             </select>
           </div>
