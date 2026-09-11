@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export const RECT_WIDTH = 1000;
-export const RECT_HEIGHT = 500;
+export const RECT_HEIGHT = 575;
 export const LOGO_WIDTH = 200;
 export const LOGO_HEIGHT = 90;
 

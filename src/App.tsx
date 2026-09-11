@@ -141,60 +141,93 @@ function App() {
   return (
     <div className="container">
       <div className="title">Music screen saver</div>
-      <select
-        value={selectedScale}
-        onChange={(event) => changeScale(event.target.value as ScaleName)}
-      >
-        <option value="cmajor">C Major</option>
-        <option value="aminor">A Minor</option>
-        <option value="gmajor">G Major</option>
-      </select>
-      <div className="octave-controls">
-        <button
-          type="button"
-          onClick={() => shiftOctave(-1)}
-          disabled={octave <= MIN_OCTAVE}
-        >
-          Octave down
-        </button>
-        <span>Starting octave: {octave}</span>
-        <button
-          type="button"
-          onClick={() => shiftOctave(1)}
-          disabled={octave >= MAX_OCTAVE}
-        >
-          Octave up
-        </button>
-      </div>
-      <div>
-        {scaleNotes.map((note) => (
-          <button type="button" key={note} onClick={() => updateNote(note)}>
-            {note}
-          </button>
-        ))}
-      </div>
-      <div>Current selected note: {selectedNote}</div>
-      <div className="tv">
-        <div className="rectangle" onClick={clickHandler}>
-          {spawns.map((spawn) => {
-            return (
-              <Spawn
-                x={spawn.x}
-                y={spawn.y}
-                note={spawn.note}
-                key={spawn.id}
-              />
-            );
-          })}
-          <DVDIcon
-            width={`${LOGO_WIDTH}px`}
-            height={`${LOGO_HEIGHT}px`}
-            color={color}
-            top={top}
-            left={left}
-          />
+      <div className="tv-set">
+        <div className="tv">
+          <div className="rectangle" onClick={clickHandler}>
+            {spawns.map((spawn) => {
+              return (
+                <Spawn
+                  x={spawn.x}
+                  y={spawn.y}
+                  note={spawn.note}
+                  key={spawn.id}
+                />
+              );
+            })}
+            <DVDIcon
+              width={`${LOGO_WIDTH}px`}
+              height={`${LOGO_HEIGHT}px`}
+              color={color}
+              top={top}
+              left={left}
+            />
+          </div>
+          <img src={tvStencil} alt="" className="tv-frame" />
         </div>
-        <img src={tvStencil} alt="" className="tv-frame" />
+        <div className="tv-panel">
+          <div className="tv-control">
+            <span className="tv-label">Input</span>
+            <select
+              className="tv-select"
+              value={selectedScale}
+              onChange={(event) =>
+                changeScale(event.target.value as ScaleName)
+              }
+            >
+              <option value="cmajor">C Major</option>
+              <option value="aminor">A Minor</option>
+              <option value="gmajor">G Major</option>
+            </select>
+          </div>
+          <div className="tv-control">
+            <span className="tv-label">Octave</span>
+            <div className="tv-btn-row">
+              <button
+                type="button"
+                className="tv-btn"
+                onClick={() => shiftOctave(-1)}
+                disabled={octave <= MIN_OCTAVE}
+              >
+                −
+              </button>
+              <span className="tv-readout">{octave}</span>
+              <button
+                type="button"
+                className="tv-btn"
+                onClick={() => shiftOctave(1)}
+                disabled={octave >= MAX_OCTAVE}
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <div className="tv-control tv-control-notes">
+            <span className="tv-label">Channel</span>
+            <div className="tv-btn-row">
+              {scaleNotes.map((note) => (
+                <button
+                  type="button"
+                  className={
+                    note === selectedNote ? "tv-btn is-on" : "tv-btn"
+                  }
+                  key={note}
+                  onClick={() => updateNote(note)}
+                >
+                  {note}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="tv-control">
+            <span className="tv-label">On air</span>
+            <div className="tv-status">
+              <span className="tv-led" />
+              <span className="tv-readout tv-readout-wide">
+                {selectedNote}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
