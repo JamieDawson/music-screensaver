@@ -4,7 +4,7 @@ let synth: Tone.PolySynth | null = null;
 
 function getSynth() {
   if (!synth) {
-    synth = new Tone.PolySynth(Tone.Synth).toDestination();
+    synth = new Tone.PolySynth(Tone.MonoSynth).toDestination();
   }
   return synth;
 }

@@ -10,12 +10,7 @@ import {
   useDimensions,
   type Obstacle,
 } from "./hooks/useDimensions";
-import {
-  defaultScaleId,
-  getScale,
-  scaleGroups,
-  withOctaves,
-} from "./scales";
+import { defaultScaleId, getScale, scaleGroups, withOctaves } from "./scales";
 
 const SPAWN_SIZE = 30;
 const MIN_OCTAVE = 1;
@@ -105,6 +100,10 @@ function App() {
     setSelectedNote(
       withOctaves(getScale(selectedScale).notes, nextOctave)[noteIndex],
     );
+  };
+
+  const removeAllSpawns = () => {
+    setSpawns([]);
   };
 
   useEffect(() => {
@@ -198,6 +197,17 @@ function App() {
               <span className="tv-led" />
               <span className="tv-readout tv-readout-wide">{selectedNote}</span>
             </div>
+          </div>
+          <div className="tv-control">
+            <span className="tv-label">Reset</span>
+            <button
+              type="button"
+              className="tv-btn tv-btn-wide"
+              onClick={() => removeAllSpawns()}
+              disabled={spawns.length === 0}
+            >
+              Clear
+            </button>
           </div>
         </div>
       </div>

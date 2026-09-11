@@ -124,6 +124,17 @@ body {
   cursor: default;
 }
 
+.tv-btn-wide {
+  width: auto;
+  min-width: 68px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .tv-select {
   appearance: none;
   min-width: 168px;
