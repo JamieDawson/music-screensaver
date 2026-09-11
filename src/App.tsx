@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { playNote, startAudio } from "./audio";
 import { DVDIcon } from "./components/DVDIcon";
 import {
   LOGO_HEIGHT,
@@ -67,7 +68,9 @@ function Spawn({ x, y, note }: Pick<Obstacle, "x" | "y" | "note">) {
 
 function App() {
   const [spawns, setSpawns] = useState<Obstacle[]>([]);
-  const { color, top, left } = useDimensions(spawns);
+  const { color, top, left } = useDimensions(spawns, (obstacle) => {
+    void playNote(obstacle.note);
+  });
 
   const [selectedScale, setSelectedScale] = useState<ScaleName>("cmajor");
   const [octave, setOctave] = useState(4);
@@ -76,6 +79,7 @@ function App() {
   const scaleNotes = withOctaves(scales[selectedScale], octave);
 
   const clickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    void startAudio();
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - bounds.left - event.currentTarget.clientLeft;
     const y = event.clientY - bounds.top - event.currentTarget.clientTop;
@@ -111,6 +115,7 @@ function App() {
   };
 
   const updateNote = (clickedNote: string) => {
+    void startAudio();
     setSelectedNote(clickedNote);
   };
 

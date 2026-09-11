@@ -51,7 +51,10 @@ const obstacleRect = (obstacle: Obstacle): Rect => ({
   h: obstacle.height,
 });
 
-export const useDimensions = (obstacles: Obstacle[] = []) => {
+export const useDimensions = (
+  obstacles: Obstacle[] = [],
+  onHit?: (obstacle: Obstacle) => void,
+) => {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
   const [color, setColor] = useState("#60D833");
@@ -60,6 +63,8 @@ export const useDimensions = (obstacles: Obstacle[] = []) => {
 
   // Squares the logo is already touching, so we don't reverse every frame
   const overlappingRef = useRef<Set<number>>(new Set());
+  const onHitRef = useRef(onHit);
+  onHitRef.current = onHit;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -116,6 +121,11 @@ export const useDimensions = (obstacles: Obstacle[] = []) => {
         const hitHorizontal = overlapX <= overlapY;
         const isNewHit = !overlappingRef.current.has(obstacle.id);
 
+        if (isNewHit) {
+          bounced = true;
+          onHitRef.current?.(obstacle);
+        }
+
         if (hitHorizontal) {
           const logoCenter = nextLeft + LOGO_WIDTH / 2;
           const boxCenter = box.x + box.w / 2;
@@ -123,7 +133,6 @@ export const useDimensions = (obstacles: Obstacle[] = []) => {
             logoCenter < boxCenter ? box.x - LOGO_WIDTH : box.x + box.w;
           if (isNewHit) {
             nextHorizontal = !nextHorizontal;
-            bounced = true;
           }
         } else {
           const logoCenter = nextTop + LOGO_HEIGHT / 2;
@@ -132,7 +141,6 @@ export const useDimensions = (obstacles: Obstacle[] = []) => {
             logoCenter < boxCenter ? box.y - LOGO_HEIGHT : box.y + box.h;
           if (isNewHit) {
             nextVertical = !nextVertical;
-            bounced = true;
           }
         }
       }
