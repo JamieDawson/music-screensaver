@@ -68,7 +68,10 @@ function TvKnob({
         }
       }}
     >
-      <div className="tv-knob-face" style={{ transform: `rotate(${angle}deg)` }}>
+      <div
+        className="tv-knob-face"
+        style={{ transform: `rotate(${angle}deg)` }}
+      >
         <span className="tv-knob-marker" />
       </div>
     </div>
@@ -246,9 +249,7 @@ function App() {
             <select
               className="tv-select"
               value={selectedSynth}
-              onChange={(event) =>
-                changeSynth(event.target.value as SynthName)
-              }
+              onChange={(event) => changeSynth(event.target.value as SynthName)}
             >
               {synthOptions.map((synth) => (
                 <option key={synth.id} value={synth.id}>
@@ -260,7 +261,11 @@ function App() {
           <div className="tv-fx">
             <div className="tv-control">
               <span className="tv-label">Delay</span>
-              <TvKnob label="Delay" value={delayAmount} onChange={changeDelay} />
+              <TvKnob
+                label="Delay"
+                value={delayAmount}
+                onChange={changeDelay}
+              />
             </div>
             <div className="tv-control">
               <span className="tv-label">Reverb</span>
@@ -336,6 +341,14 @@ function App() {
           </div>
         </div>
       </div>
+      <a
+        className="credit"
+        href="https://github.com/JamieDawson/screensavr"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Made by Jamie Dawson Codes (Click for GitHub link)
+      </a>
     </div>
   );
 }
