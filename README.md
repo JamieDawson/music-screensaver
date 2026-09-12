@@ -19,10 +19,10 @@ Click the screen to drop a note. Click a note to remove it. **Clear** wipes the 
 | -------------------- | ------------------------------------------------------------------------------------ |
 | **Input**            | Pick a scale (C Major, E Blues, G Major Pentatonic, …)                               |
 | **Synth**            | Four [Tone.js](https://tonejs.github.io/) voices: Synth, MonoSynth, FMSynth, AMSynth |
-| **Knobs**            | Delay, reverb, and bitcrush — drag up for more                                       |
+| **Knobs**            | Delay, reverb, and bitcrush                                                          |
 | **Octave / Channel** | Shift range and choose the next note                                                 |
 
-Wait for the logo to bounce. That’s the instrument.
+The logo bouncing is the instrument.
 
 Future goals: Turn this app into a VST for tools like FL Studio & Reaper so that musicians can use this as a random note generator.
 
