@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import tvStencil from "./assets/tvstencil.webp";
 import {
   playNote,
+  setBitcrushAmount,
   setDelayAmount,
+  setReverbAmount,
   setSynth,
   startAudio,
   synthOptions,
@@ -23,10 +25,12 @@ const SPAWN_SIZE = 30;
 const MIN_OCTAVE = 1;
 const MAX_OCTAVE = 7;
 
-function DelayKnob({
+function TvKnob({
+  label,
   value,
   onChange,
 }: {
+  label: string;
   value: number;
   onChange: (value: number) => void;
 }) {
@@ -38,7 +42,7 @@ function DelayKnob({
     <div
       className="tv-knob"
       role="slider"
-      aria-label="Delay"
+      aria-label={label}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(value * 100)}
@@ -96,6 +100,8 @@ function App() {
   const [selectedScale, setSelectedScale] = useState(defaultScaleId);
   const [selectedSynth, setSelectedSynth] = useState<SynthName>("synth");
   const [delayAmount, setDelayAmountState] = useState(0.2);
+  const [reverbAmount, setReverbAmountState] = useState(0.2);
+  const [bitcrushAmount, setBitcrushAmountState] = useState(0);
   const [octave, setOctave] = useState(4);
   const [selectedNote, setSelectedNote] = useState("C4");
 
@@ -157,6 +163,18 @@ function App() {
     void startAudio();
     setDelayAmountState(amount);
     setDelayAmount(amount);
+  };
+
+  const changeReverb = (amount: number) => {
+    void startAudio();
+    setReverbAmountState(amount);
+    setReverbAmount(amount);
+  };
+
+  const changeBitcrush = (amount: number) => {
+    void startAudio();
+    setBitcrushAmountState(amount);
+    setBitcrushAmount(amount);
   };
 
   const shiftOctave = (delta: number) => {
@@ -239,9 +257,27 @@ function App() {
               ))}
             </select>
           </div>
-          <div className="tv-control">
-            <span className="tv-label">Delay</span>
-            <DelayKnob value={delayAmount} onChange={changeDelay} />
+          <div className="tv-fx">
+            <div className="tv-control">
+              <span className="tv-label">Delay</span>
+              <TvKnob label="Delay" value={delayAmount} onChange={changeDelay} />
+            </div>
+            <div className="tv-control">
+              <span className="tv-label">Reverb</span>
+              <TvKnob
+                label="Reverb"
+                value={reverbAmount}
+                onChange={changeReverb}
+              />
+            </div>
+            <div className="tv-control">
+              <span className="tv-label">Crush</span>
+              <TvKnob
+                label="Bitcrusher"
+                value={bitcrushAmount}
+                onChange={changeBitcrush}
+              />
+            </div>
           </div>
           <div className="tv-control">
             <span className="tv-label">Octave</span>
