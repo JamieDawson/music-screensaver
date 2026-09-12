@@ -1,8 +1,8 @@
 # Screensavr
 
-A bouncing DVD logo. A 2000s TV. Notes that play when they get hit.
+An experimental music app that used a DVD screensaver as a random note generator.
 
-Inspired by old hardware, techno, and [that one scene from The Office](https://www.youtube.com/watch?v=QOtuX0jL85Y).
+Inspired by early 2000's hardware, techno, and [that one scene from The Office](https://www.youtube.com/watch?v=QOtuX0jL85Y).
 
 ![Screensavr running in a CRT television](./src/assets/screensavr.png)
 
