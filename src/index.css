@@ -31,6 +31,9 @@ body {
   isolation: isolate;
   background: #d2d2d2;
   box-shadow: 0 0 30px 5px rgba(244, 255, 253, 0.6);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and InfoPath */
+  user-select: none; /* Standard syntax */
 }
 
 .tv-panel {
